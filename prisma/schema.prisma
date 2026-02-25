@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum ToolCategory {
+  writing
+  video
+  image
+  automation
+  marketing
+  productivity
+  customer_support
+}
+
+enum PricingType {
+  free
+  freemium
+  paid
+}
+
+model Tool {
+  id             String       @id @default(uuid())
+  name           String
+  slug           String       @unique
+  description    String
+  category       ToolCategory
+  pricingType    PricingType
+  pricingDetails String?
+  pros           String[]
+  cons           String[]
+  bestFor        String?
+  affiliateUrl   String
+  featured       Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  workflows      Workflow[]   @relation("WorkflowTools")
+  comparisons    Comparison[] @relation("ComparisonTools")
+}
+
+model Workflow {
+  id            String   @id @default(uuid())
+  title         String
+  slug          String   @unique
+  summary       String
+  content       String
+  featuredImage String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  toolsUsed     Tool[]   @relation("WorkflowTools")
+}
+
+model Prompt {
+  id        String   @id @default(uuid())
+  title     String
+  category  String
+  content   String
+  gated     Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comparison {
+  id        String   @id @default(uuid())
+  title     String
+  slug      String   @unique
+  verdict   String
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tools     Tool[]   @relation("ComparisonTools")
+}
+
+model Subscriber {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  source    String
+  tags      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
