@@ -3,6 +3,7 @@ import { Resend } from 'resend';
 
 import { prisma } from '@/lib/prisma';
 import { subscribeEmailLimiter, subscribeIpLimiter } from '@/lib/rate-limit';
+import { buildNewsletterHtml } from '@/lib/tool-context';
 import { subscribeSchema } from '@/lib/validators';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -23,14 +24,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid email payload.' }, { status: 400 });
   }
 
-  const { email, source, website, formStartedAt } = parsed.data;
+  const { email, source, website } = parsed.data;
 
   // Honeypot and bot heuristics return generic success to avoid attacker feedback loops.
   if ((website ?? '').length > 0 || isLikelyBot(userAgent)) {
-    return NextResponse.json({ success: true });
-  }
-
-  if (formStartedAt && Date.now() - formStartedAt < 1200) {
     return NextResponse.json({ success: true });
   }
 
@@ -55,12 +52,17 @@ export async function POST(request: NextRequest) {
   });
 
   if (resend) {
-    await resend.emails.send({
+    const newsletterHtml = buildNewsletterHtml();
+    const mail = await resend.emails.send({
       from: 'CreatorAILab <onboarding@resend.dev>',
       to: [email],
-      subject: 'Welcome to CreatorAILab',
-      html: '<p>Thanks for subscribing. You will receive weekly AI workflow tactics.</p>'
+      subject: 'Your CreatorAILab AI Tools Newsletter',
+      html: newsletterHtml
     });
+
+    if (mail.error) {
+      return NextResponse.json({ error: `Email send failed: ${mail.error.message}` }, { status: 502 });
+    }
   }
 
   return NextResponse.json({ success: true });

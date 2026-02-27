@@ -6,6 +6,7 @@ import './globals.css';
 import { AnalyticsBootstrap } from '@/components/analytics-bootstrap';
 import { ExitIntentPopup } from '@/components/exit-intent-popup';
 import { Nav } from '@/components/nav';
+import { SiteFooter } from '@/components/site-footer';
 
 export const metadata: Metadata = {
   title: 'CreatorAILab',
@@ -32,7 +33,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnalyticsBootstrap />
         <ExitIntentPopup />
         <Nav />
-        <main className="container py-10">{children}</main>
+        <main>{children}</main>
+        <SiteFooter />
       </body>
     </html>
   );

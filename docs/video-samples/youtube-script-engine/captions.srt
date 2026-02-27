@@ -1,0 +1,29 @@
+1
+00:00:00,000 --> 00:00:12,000
+If writing YouTube scripts takes you hours, this workflow cuts the process to about twenty minutes.
+Use ChatGPT, Notion AI, and Canva AI to build a full script pack fast.
+
+2
+00:00:12,000 --> 00:00:28,000
+Step one: collect three high-performing videos in your niche.
+Extract hook style, pacing, and CTA pattern for context.
+
+3
+00:00:28,000 --> 00:00:44,000
+Step two: prompt ChatGPT for three hook options:
+curiosity, contrarian, and authority.
+
+4
+00:00:44,000 --> 00:01:00,000
+Step three: move the best hook into Notion AI.
+Generate a structured outline: hook, value points, proof, CTA.
+
+5
+00:01:00,000 --> 00:01:16,000
+Step four: run a clarity pass in ChatGPT.
+Then generate thumbnail concepts in Canva AI.
+
+6
+00:01:16,000 --> 00:01:30,000
+Result: hook variants, final script, CTA options, and thumbnail text ideas.
+Repeat weekly for quality and speed gains.

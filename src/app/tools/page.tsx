@@ -1,106 +1,88 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 import { safeGetTools } from '@/lib/content';
 import { createMetadata } from '@/lib/metadata';
+import { getToolContext } from '@/lib/tool-context';
 
-export const revalidate = 300;
-
-export const metadata = createMetadata('AI Tools Directory | CreatorAILab', 'Discover AI tools by category and pricing.', '/tools');
-
-const categories = ['all', 'writing', 'video', 'image', 'automation', 'marketing', 'productivity', 'customer_support'] as const;
-const pricingTypes = ['all', 'free', 'freemium', 'paid'] as const;
-const sorts = ['featured', 'name'] as const;
+export const metadata = createMetadata('Discover the Best AI Tools | CreatorAILab', 'Curated directory of the most powerful AI tools.', '/tools');
 
 type ToolsSearchParams = {
+  q?: string;
   category?: string;
-  pricing?: string;
-  sort?: string;
 };
+
+const chips = ['all', 'writing', 'video', 'design', 'productivity', 'audio'];
+
+function categoryForChip(chip: string) {
+  if (chip === 'design') return 'image';
+  if (chip === 'audio') return 'customer_support';
+  return chip;
+}
 
 export default async function ToolsPage({ searchParams }: { searchParams?: ToolsSearchParams }) {
   const tools = await safeGetTools();
-  const category = categories.includes((searchParams?.category ?? 'all') as (typeof categories)[number])
-    ? (searchParams?.category ?? 'all')
-    : 'all';
-  const pricing = pricingTypes.includes((searchParams?.pricing ?? 'all') as (typeof pricingTypes)[number])
-    ? (searchParams?.pricing ?? 'all')
-    : 'all';
-  const sort = sorts.includes((searchParams?.sort ?? 'featured') as (typeof sorts)[number])
-    ? (searchParams?.sort ?? 'featured')
-    : 'featured';
+  const q = (searchParams?.q ?? '').toLowerCase();
+  const chip = chips.includes((searchParams?.category ?? 'all').toLowerCase()) ? (searchParams?.category ?? 'all').toLowerCase() : 'all';
 
-  const filtered = tools
-    .filter((tool) => category === 'all' || tool.category === category)
-    .filter((tool) => pricing === 'all' || tool.pricingType === pricing)
-    .sort((a, b) => {
-      if (sort === 'name') {
-        return a.name.localeCompare(b.name);
-      }
-      if (a.featured === b.featured) {
-        return a.name.localeCompare(b.name);
-      }
-      return a.featured ? -1 : 1;
-    });
+  const filtered = tools.filter((tool) => {
+    const matchesQ = !q || [tool.name, tool.description, tool.bestFor ?? ''].join(' ').toLowerCase().includes(q);
+    const matchesCat = chip === 'all' || tool.category === categoryForChip(chip);
+    return matchesQ && matchesCat;
+  });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">AI Tool Directory</h1>
-        <p className="text-slate-700">Browse curated tools for creators and solopreneurs.</p>
+    <section className="mx-auto max-w-6xl px-6 py-16">
+      <div className="text-center">
+        <h1 className="text-6xl font-black tracking-tight text-slate-900">
+          Discover the Best <span className="bg-gradient-to-r from-indigo-600 to-violet-500 bg-clip-text text-transparent">AI Tools</span>
+        </h1>
+        <p className="mx-auto mt-5 max-w-3xl text-2xl text-slate-600">
+          A curated directory of the most powerful artificial intelligence tools to help you create better content, faster.
+        </p>
       </div>
 
-      <form className="card grid gap-3 md:grid-cols-3">
-        <label className="text-sm font-medium">
-          Category
-          <select name="category" defaultValue={category} className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm">
-            {categories.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-sm font-medium">
-          Pricing
-          <select name="pricing" defaultValue={pricing} className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm">
-            {pricingTypes.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="text-sm font-medium">
-          Sort
-          <select name="sort" defaultValue={sort} className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm">
-            {sorts.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit" className="btn w-fit">
-          Apply Filters
-        </button>
+      <form className="mx-auto mt-10 max-w-3xl space-y-6">
+        <input
+          name="q"
+          defaultValue={searchParams?.q ?? ''}
+          placeholder="Search tools by name, description, or feature..."
+          className="w-full rounded-3xl border border-slate-200 bg-white px-6 py-4 text-lg shadow-sm outline-none focus:ring-2 focus:ring-indigo-300"
+        />
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {chips.map((c) => (
+            <button key={c} name="category" value={c} className={`chip ${chip === c ? 'active' : ''}`}>
+              {c[0].toUpperCase() + c.slice(1)}
+            </button>
+          ))}
+        </div>
       </form>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((tool) => (
-          <article key={tool.id} className="card space-y-2">
-            <div className="flex items-center justify-between gap-2">
-              <h2 className="text-lg font-semibold">{tool.name}</h2>
-              {tool.featured ? <span className="rounded bg-emerald-100 px-2 py-1 text-xs font-semibold text-emerald-800">Featured</span> : null}
+      <div className="mt-12 grid gap-7 md:grid-cols-2 lg:grid-cols-3">
+        {filtered.map((tool) => {
+          const context = getToolContext(tool.slug);
+          return (
+          <article key={tool.id} className="card-soft overflow-hidden">
+            <div className="relative h-48 w-full overflow-hidden">
+              <Image src={context.heroImage} alt={context.imageAlt} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 33vw" />
+              <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-slate-700">
+                {tool.category}
+              </span>
             </div>
-            <p className="text-sm text-slate-700">{tool.description}</p>
-            <p className="text-xs uppercase tracking-wider text-slate-500">{tool.category} · {tool.pricingType}</p>
-            <Link href={`/tools/${tool.slug}`} className="btn-secondary w-full">
-              View Details
-            </Link>
+            <div className="space-y-3 p-5">
+              <div className="flex items-center justify-between">
+                <h2 className="text-3xl font-bold text-slate-900">{tool.name}</h2>
+                <span className="rounded-full border border-slate-300 px-3 py-1 text-xs font-semibold text-slate-600">{tool.pricingType}</span>
+              </div>
+              <p className="text-lg text-slate-600">{tool.description}</p>
+              <Link href={`/tools/${tool.slug}`} className="text-lg font-semibold text-indigo-600 hover:text-indigo-700">
+                View tool →
+              </Link>
+            </div>
           </article>
-        ))}
-        {filtered.length === 0 ? <p className="text-sm text-slate-600">No matching tools found.</p> : null}
+          );
+        })}
       </div>
-    </div>
+    </section>
   );
 }

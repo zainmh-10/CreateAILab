@@ -1,69 +1,40 @@
-import Link from 'next/link';
-
-import { EmailCapture } from '@/components/email-capture';
-import { safeGetTools, safeGetWorkflows } from '@/lib/content';
 import { createMetadata } from '@/lib/metadata';
+import { EmailCapture } from '@/components/email-capture';
 
 export const metadata = createMetadata(
-  'CreatorAILab | Discover AI Tools and Workflows',
-  'Find practical AI tools, prompt libraries, and workflow guides to scale your creator business.',
+  'CreatorAILab | Supercharge your workflow with AI Tools',
+  'Discover curated AI tools, copy-paste prompt templates, and step-by-step workflows for creators.',
   '/'
 );
 
-export default async function HomePage() {
-  const [tools, workflows] = await Promise.all([safeGetTools(), safeGetWorkflows()]);
-
+export default function HomePage() {
   return (
-    <div className="space-y-12">
-      <section className="space-y-4">
-        <p className="text-sm font-semibold uppercase tracking-widest text-accent">Creator Productivity Platform</p>
-        <h1 className="max-w-3xl text-4xl font-black tracking-tight sm:text-5xl">
-          Discover the right AI stack and deploy workflows that ship faster.
-        </h1>
-        <p className="max-w-2xl text-slate-700">
-          CreatorAILab helps non-technical creators pick tools, use prompts, and execute proven workflows.
+    <div className="hero-surface">
+      <div className="hero-blob one" />
+      <div className="hero-blob two" />
+      <section className="relative mx-auto max-w-6xl px-6 pb-28 pt-16 text-center">
+        <p className="mx-auto mb-6 w-fit rounded-full bg-indigo-100 px-4 py-1 text-sm font-semibold text-indigo-700">
+          ✧ The #1 AI Resource for Solopreneurs
         </p>
-        <div className="flex gap-3">
-          <Link href="/tools" className="btn">
-            Explore Tools
-          </Link>
-          <Link href="/workflows" className="btn-secondary">
-            View Workflows
-          </Link>
+        <h1 className="mx-auto max-w-3xl text-5xl font-black leading-tight text-slate-900 sm:text-7xl">
+          Supercharge your workflow with <span className="bg-gradient-to-r from-indigo-600 to-fuchsia-500 bg-clip-text text-transparent">AI Tools</span>
+        </h1>
+        <p className="mx-auto mt-6 max-w-3xl text-2xl leading-relaxed text-slate-600">
+          Discover curated AI tools, copy-paste prompt templates, and step-by-step workflows designed specifically to help creators scale without burning out.
+        </p>
+
+        <div id="newsletter" className="mx-auto mt-10 w-full max-w-2xl rounded-2xl border border-slate-200 bg-white p-3 shadow-lg shadow-slate-200/70">
+          <EmailCapture
+            source="homepage_hero"
+            compact
+            title="Get free AI workflows + newsletter issue"
+            description="Enter your email and we will send a full creator newsletter with tactical playbooks for each tool."
+            buttonLabel="Get Free Workflows"
+          />
         </div>
+
+        <p className="mt-5 text-base text-slate-500">Join 10,000+ creators getting our weekly AI insights.</p>
       </section>
-
-      <section className="grid gap-4 md:grid-cols-2">
-        <div className="card">
-          <h2 className="text-xl font-semibold">Featured Tools</h2>
-          <ul className="mt-3 space-y-2 text-sm text-slate-700">
-            {tools.slice(0, 5).map((tool) => (
-              <li key={tool.id}>
-                <Link href={`/tools/${tool.slug}`} className="hover:underline">
-                  {tool.name}
-                </Link>
-              </li>
-            ))}
-            {tools.length === 0 ? <li>No tools seeded yet.</li> : null}
-          </ul>
-        </div>
-
-        <div className="card">
-          <h2 className="text-xl font-semibold">Latest Workflows</h2>
-          <ul className="mt-3 space-y-2 text-sm text-slate-700">
-            {workflows.slice(0, 5).map((workflow) => (
-              <li key={workflow.id}>
-                <Link href={`/workflows/${workflow.slug}`} className="hover:underline">
-                  {workflow.title}
-                </Link>
-              </li>
-            ))}
-            {workflows.length === 0 ? <li>No workflows seeded yet.</li> : null}
-          </ul>
-        </div>
-      </section>
-
-      <EmailCapture source="homepage" />
     </div>
   );
 }

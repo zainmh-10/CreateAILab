@@ -1,0 +1,21 @@
+Title: 10x YouTube Script Generation Workflow (CreatorAILab Sample)
+Duration Target: ~90 seconds
+Tone: clear, tactical, creator-friendly
+
+[Scene 1 | 0:00-0:12]
+If writing YouTube scripts takes you hours, this workflow cuts the process down to about twenty minutes. In this tutorial, you will use ChatGPT, Notion AI, and Canva AI to produce a full script pack fast.
+
+[Scene 2 | 0:12-0:28]
+Step one: gather three top-performing videos in your niche. Capture their hook style, pacing, and CTA pattern. We only need patterns, not copies. This gives your prompts real context.
+
+[Scene 3 | 0:28-0:44]
+Step two: open ChatGPT and request three hook options using your audience profile and topic constraints. Ask for one curiosity hook, one contrarian hook, and one authority hook.
+
+[Scene 4 | 0:44-1:00]
+Step three: move the winning hook into Notion AI and generate your structured outline: hook, value points, examples, and CTA. Keep each section short enough to sound natural when spoken.
+
+[Scene 5 | 1:00-1:16]
+Step four: run a clarity pass in ChatGPT to tighten wording and improve spoken flow. Then use Canva AI for thumbnail concepts that match your hook angle.
+
+[Scene 6 | 1:16-1:30]
+End result: one script pack with hook variants, a clean final script, CTA options, and thumbnail text ideas. Repeat this weekly and your scripting quality and speed both improve.

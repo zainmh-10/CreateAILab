@@ -7,22 +7,58 @@
 }
 
 body {
-  @apply bg-background text-foreground;
+  background: #f8fafc;
+  color: #0f172a;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
 }
 
-.container {
-  @apply mx-auto w-full max-w-6xl px-4;
+.hero-surface {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #f8f9ff 0%, #ffffff 70%);
 }
 
-.card {
-  @apply rounded-xl border border-slate-200 bg-card p-5 shadow-sm;
+.hero-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(10px);
+  opacity: 0.5;
 }
 
-.btn {
-  @apply inline-flex items-center justify-center rounded-md bg-accent px-4 py-2 text-sm font-semibold text-white transition hover:opacity-90;
+.hero-blob.one {
+  width: 420px;
+  height: 280px;
+  left: -80px;
+  top: 20px;
+  background: radial-gradient(circle at 40% 40%, #dbe4ff 0%, #e9efff 60%, transparent 100%);
 }
 
-.btn-secondary {
-  @apply inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-foreground transition hover:bg-slate-50;
+.hero-blob.two {
+  width: 480px;
+  height: 320px;
+  right: -120px;
+  top: 0px;
+  background: radial-gradient(circle at 50% 50%, #ffe3ef 0%, #ffeef5 60%, transparent 100%);
+}
+
+.card-soft {
+  border-radius: 22px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+.chip {
+  border-radius: 9999px;
+  border: 1px solid #94a3b8;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+.chip.active {
+  background: linear-gradient(90deg, #4338ca, #6d28d9);
+  border-color: transparent;
+  color: white;
 }

@@ -1,5 +1,6 @@
 import type { Comparison, Prompt, Tool, Workflow } from '@prisma/client';
 
+import { getCatalogToolBySlug, popularToolsCatalog } from '@/lib/tool-catalog';
 import { prisma } from '@/lib/prisma';
 
 const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
@@ -34,23 +35,31 @@ export async function getFeaturedTools(limit = 3): Promise<Tool[]> {
 
 export async function safeGetTools(): Promise<Tool[]> {
   if (!hasDatabaseUrl) {
-    return [];
+    return popularToolsCatalog;
   }
   try {
-    return await getTools();
+    const dbTools = await getTools();
+    const merged = [...dbTools, ...popularToolsCatalog];
+    const deduped = new Map<string, Tool>();
+    for (const tool of merged) {
+      if (!deduped.has(tool.slug)) {
+        deduped.set(tool.slug, tool);
+      }
+    }
+    return Array.from(deduped.values());
   } catch {
-    return [];
+    return popularToolsCatalog;
   }
 }
 
 export async function safeGetToolBySlug(slug: string): Promise<Tool | null> {
   if (!hasDatabaseUrl) {
-    return null;
+    return getCatalogToolBySlug(slug);
   }
   try {
-    return await getToolBySlug(slug);
+    return (await getToolBySlug(slug)) ?? getCatalogToolBySlug(slug);
   } catch {
-    return null;
+    return getCatalogToolBySlug(slug);
   }
 }
 
