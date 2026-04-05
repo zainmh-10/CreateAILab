@@ -1,0 +1,94 @@
+rules_version = '2';
+
+// Firestore security rules — default deny; extend only with explicit, least-privilege matches.
+// Deploy: Firebase Console → Firestore → Rules, or `firebase deploy --only firestore:rules`.
+//
+// Admin-only Firestore: delete the `match /users` block (and unused helpers) and keep only the
+// final `match /{document=**}` deny — then use Admin SDK / Cloud Functions for all reads and writes.
+//
+// Client email in `users/{uid}` is not verified by these rules; treat as display metadata or sync
+// from Auth via a trusted Cloud Function.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // --- Helpers (avoid get()/exists() on unrelated docs in hot paths — they count as extra reads) ---
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function uid() {
+      return request.auth.uid;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && uid() == userId;
+    }
+
+    // Set via Admin SDK only, e.g. admin.auth().setCustomUserClaims(uid, { role: 'admin' })
+    function hasRole(role) {
+      return isSignedIn() && request.auth.token.role == role;
+    }
+
+    function isAdmin() {
+      return hasRole('admin');
+    }
+
+    function userProfileCreateValid() {
+      return request.resource.data.keys().hasOnly(['displayName', 'email', 'photoURL', 'createdAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 128
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 320
+        && (request.resource.data.photoURL == null
+          || (request.resource.data.photoURL is string
+            && request.resource.data.photoURL.size() <= 2048))
+        && request.resource.data.createdAt is timestamp
+        && request.resource.data.createdAt == request.time;
+    }
+
+    function userProfileUpdateValid() {
+      return request.resource.data.keys().hasOnly(['displayName', 'email', 'photoURL', 'createdAt', 'updatedAt'])
+        // Only these fields may change; email and createdAt must stay identical (see below).
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'photoURL', 'updatedAt'])
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.createdAt == resource.data.createdAt
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() > 0
+        && request.resource.data.displayName.size() <= 128
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 320
+        && (request.resource.data.photoURL == null
+          || (request.resource.data.photoURL is string
+            && request.resource.data.photoURL.size() <= 2048))
+        && request.resource.data.updatedAt is timestamp
+        && request.resource.data.updatedAt == request.time;
+    }
+
+    // --- Example: one document per auth user (adjust fields to match your app; remove if unused) ---
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId) && userProfileCreateValid();
+
+      allow update: if isOwner(userId) && userProfileUpdateValid();
+
+      allow delete: if isOwner(userId);
+    }
+
+    // --- Example: admin-only collection (uncomment and set custom claims in Admin SDK) ---
+    //
+    // match /admin/{document=**} {
+    //   allow read, write: if isAdmin();
+    // }
+
+    // --- Default: deny everything not matched above ---
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

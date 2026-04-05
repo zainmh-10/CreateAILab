@@ -34,7 +34,7 @@ export function ExitIntentPopup() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 p-4" role="dialog" aria-modal="true" aria-label="Newsletter signup">
       <div className="w-full max-w-xl space-y-3 rounded-2xl bg-white p-4 shadow-xl">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold">Before you go</h2>

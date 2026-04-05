@@ -51,8 +51,8 @@ export default async function ToolDetailPage({ params }: { params: Params }) {
   return (
     <article className="mx-auto max-w-5xl space-y-6 px-6 py-12">
       <ToolPageView slug={tool.slug} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(product) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema).replace(/</g, '\\u003c') }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(product).replace(/</g, '\\u003c') }} />
       <header className="space-y-2">
         <p className="text-xs uppercase tracking-wider text-slate-500">{tool.category}</p>
         <h1 className="text-3xl font-bold">{tool.name}</h1>
@@ -103,9 +103,9 @@ export default async function ToolDetailPage({ params }: { params: Params }) {
       <section className="card">
         <EmailCapture
           source={`tool:${tool.slug}`}
-          title={`Get the ${tool.name} newsletter workflow`}
-          description="Enter your email to receive a generated newsletter issue with execution ideas for every featured AI product."
-          buttonLabel="Send me the newsletter"
+          title={`Get the weekly AI news breakdown + ${tool.name} insights`}
+          description="Every Sunday at 8pm GMT, get the latest AI news, the best tool to use that week, and a short tutorial with practical creator takeaways."
+          buttonLabel="Join the weekly newsletter"
         />
       </section>
     </article>

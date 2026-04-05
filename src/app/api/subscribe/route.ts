@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+import { buildNewsletterConfirmationHtml, WEEKLY_NEWSLETTER_TAG } from '@/lib/newsletter';
 import { prisma } from '@/lib/prisma';
 import { subscribeEmailLimiter, subscribeIpLimiter } from '@/lib/rate-limit';
-import { buildNewsletterHtml } from '@/lib/tool-context';
 import { subscribeSchema } from '@/lib/validators';
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Invalid email payload.' }, { status: 400 });
   }
 
-  const { email, source, website } = parsed.data;
+  const { email, source, website, formStartedAt } = parsed.data;
 
-  // Honeypot and bot heuristics return generic success to avoid attacker feedback loops.
-  if ((website ?? '').length > 0 || isLikelyBot(userAgent)) {
+  const tooFast = formStartedAt && Date.now() - formStartedAt < 2000;
+  if ((website ?? '').length > 0 || isLikelyBot(userAgent) || tooFast) {
     return NextResponse.json({ success: true });
   }
 
@@ -45,23 +45,32 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  await prisma.subscriber.upsert({
+  const subscriber = await prisma.subscriber.upsert({
     where: { email },
-    create: { email, source: source ?? 'unknown', tags: ['lead'] },
-    update: { source: source ?? 'unknown', tags: ['lead'] }
+    create: { email, source: source ?? 'unknown', tags: ['lead', WEEKLY_NEWSLETTER_TAG] },
+    update: { source: source ?? 'unknown' }
   });
 
+  const nextTags = Array.from(new Set([...subscriber.tags, 'lead', WEEKLY_NEWSLETTER_TAG]));
+  if (nextTags.length !== subscriber.tags.length) {
+    await prisma.subscriber.update({
+      where: { id: subscriber.id },
+      data: { tags: nextTags }
+    });
+  }
+
   if (resend) {
-    const newsletterHtml = buildNewsletterHtml();
+    const newsletterHtml = buildNewsletterConfirmationHtml();
     const mail = await resend.emails.send({
       from: 'CreatorAILab <onboarding@resend.dev>',
       to: [email],
-      subject: 'Your CreatorAILab AI Tools Newsletter',
+      subject: 'You are subscribed to the CreatorAILab weekly AI brief',
       html: newsletterHtml
     });
 
     if (mail.error) {
-      return NextResponse.json({ error: `Email send failed: ${mail.error.message}` }, { status: 502 });
+      console.error('resend_email_failed', mail.error.message);
+      return NextResponse.json({ error: 'Unable to send confirmation email. Please try again.' }, { status: 502 });
     }
   }
 

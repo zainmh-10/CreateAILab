@@ -16,6 +16,8 @@ export function SiteFooter() {
           <h3 className="mb-4 font-semibold text-slate-900">Platform</h3>
           <ul className="space-y-2 text-sm text-slate-600">
             <li><Link href="/tools">AI Tools Directory</Link></li>
+            <li><Link href="/news">Latest AI News</Link></li>
+            <li><Link href="/leaderboard">AI Leaderboard</Link></li>
             <li><Link href="/workflows">Workflow Guides</Link></li>
             <li><Link href="/prompts">Prompt Library</Link></li>
           </ul>
@@ -23,9 +25,9 @@ export function SiteFooter() {
         <div>
           <h3 className="mb-4 font-semibold text-slate-900">Legal</h3>
           <ul className="space-y-2 text-sm text-slate-600">
-            <li><Link href="#">Privacy Policy</Link></li>
-            <li><Link href="#">Terms of Service</Link></li>
-            <li><Link href="#">Affiliate Disclosure</Link></li>
+            <li><Link href="/privacy">Privacy Policy</Link></li>
+            <li><Link href="/terms">Terms of Service</Link></li>
+            <li><Link href="/affiliate">Affiliate Disclosure</Link></li>
           </ul>
         </div>
       </div>

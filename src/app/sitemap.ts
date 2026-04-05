@@ -6,7 +6,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
   const [tools, workflows] = await Promise.all([safeGetTools(), safeGetWorkflows()]);
 
-  const staticPaths = ['', '/tools', '/workflows', '/prompts', '/quiz'];
+  const staticPaths = ['', '/tools', '/news', '/leaderboard', '/workflows', '/prompts', '/quiz', '/quiz/weekly', '/privacy', '/terms', '/affiliate'];
   const pages = staticPaths.map((path) => ({ url: `${siteUrl}${path}`, lastModified: new Date() }));
 
   const toolPages = tools.map((tool) => ({

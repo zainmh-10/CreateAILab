@@ -22,8 +22,21 @@ export function PromptCard({ title, category, content, gated }: PromptCardProps)
       return;
     }
 
-    await navigator.clipboard.writeText(content);
-    trackEvent('prompt_download', { title, category });
+    try {
+      await navigator.clipboard.writeText(content);
+      trackEvent('prompt_download', { title, category });
+    } catch {
+      const textArea = document.createElement('textarea');
+      textArea.value = content;
+      textArea.style.position = 'fixed';
+      textArea.style.left = '-9999px';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
+      trackEvent('prompt_download', { title, category });
+    }
   }
 
   return (

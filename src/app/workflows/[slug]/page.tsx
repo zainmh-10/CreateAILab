@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+import { CopyablePrompt } from '@/components/copyable-prompt';
 import { createMetadata } from '@/lib/metadata';
 import { getWorkflowGuide, workflowGuides } from '@/lib/workflow-guides';
 
@@ -48,13 +49,67 @@ export default function WorkflowDetailPage({ params }: { params: Params }) {
           </ul>
         </div>
 
+        {guide.toolQuickStarts && Object.keys(guide.toolQuickStarts).length > 0 && (
+          <div>
+            <h2 className="text-xl font-bold text-slate-900">Tools Quick Start</h2>
+            <p className="mt-2 text-sm text-slate-600">How to use each tool for this workflow:</p>
+            <ul className="mt-3 space-y-3">
+              {Object.entries(guide.toolQuickStarts).map(([tool, text]) => (
+                <li key={tool} className="rounded-lg border border-slate-200 bg-slate-50/50 p-3">
+                  <span className="font-semibold text-slate-800">{tool}:</span>{' '}
+                  <span className="text-slate-700">{text}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
         <div>
           <h2 className="text-xl font-bold text-slate-900">Step-by-Step Tutorial</h2>
-          <ol className="mt-3 list-decimal space-y-2 pl-6 text-slate-700">
-            {guide.steps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
+          {guide.detailedTutorial && guide.detailedTutorial.length > 0 ? (
+            <ol className="mt-4 list-none space-y-8 pl-0">
+              {guide.detailedTutorial.map((step, idx) => (
+                <li key={idx} className="space-y-3">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                    {idx + 1}. {step.title}
+                    {step.toolRef && (
+                      <span className="ml-2 text-sm font-normal text-slate-500">({step.toolRef})</span>
+                    )}
+                  </h3>
+                  <p className="text-slate-700 leading-relaxed">{step.body}</p>
+                  {step.substeps && step.substeps.length > 0 && (
+                    <ol className="list-decimal space-y-1 pl-6 text-slate-700">
+                      {step.substeps.map((sub, i) => (
+                        <li key={i}>{sub}</li>
+                      ))}
+                    </ol>
+                  )}
+                  {step.examplePrompt && (
+                    <div>
+                      <p className="mb-2 text-sm font-semibold text-slate-700">Example prompt:</p>
+                      <CopyablePrompt content={step.examplePrompt} />
+                    </div>
+                  )}
+                  {step.toolTips && step.toolTips.length > 0 && (
+                    <div className="rounded-lg border border-amber-200 bg-amber-50/50 p-3">
+                      <p className="mb-2 text-sm font-semibold text-amber-800">Tips:</p>
+                      <ul className="list-disc space-y-1 pl-5 text-sm text-amber-900">
+                        {step.toolTips.map((tip, i) => (
+                          <li key={i}>{tip}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <ol className="mt-3 list-decimal space-y-2 pl-6 text-slate-700">
+              {guide.steps.map((step) => (
+                <li key={step}>{step}</li>
+              ))}
+            </ol>
+          )}
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">

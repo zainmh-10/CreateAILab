@@ -6,9 +6,9 @@ import { trackEvent } from '@/lib/analytics';
 
 export function EmailCapture({
   source = 'global',
-  title = 'Get weekly creator AI workflows',
-  description = 'Actionable guides, prompts, and tool picks for solopreneurs.',
-  buttonLabel = 'Subscribe',
+  title = 'Get the weekly AI news breakdown',
+  description = 'Every Sunday at 8pm GMT, get the week in AI, the best tool to use right now, and a short tutorial to apply it.',
+  buttonLabel = 'Join Free',
   compact = false,
   onSuccess
 }: {
@@ -43,7 +43,7 @@ export function EmailCapture({
       }
 
       setStatus('success');
-      setMessage('You are in. Check your inbox for welcome details.');
+      setMessage('You are in. Your weekly AI briefing will arrive every Sunday at 8pm GMT.');
       trackEvent('email_signup', { source });
       onSuccess?.();
       setEmail('');
@@ -79,7 +79,15 @@ export function EmailCapture({
         className="hidden"
         name="website"
       />
-      {message ? <p className="text-sm text-slate-700">{message}</p> : null}
+      {message ? (
+        <p
+          className={`text-sm ${status === 'error' ? 'text-rose-600' : status === 'success' ? 'text-emerald-700' : 'text-slate-700'}`}
+          role={status === 'error' ? 'alert' : 'status'}
+          aria-live="polite"
+        >
+          {message}
+        </p>
+      ) : null}
     </form>
   );
 }

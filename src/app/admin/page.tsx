@@ -23,14 +23,35 @@ import { prisma } from '@/lib/prisma';
 
 export const metadata = createMetadata('Admin | CreatorAILab', 'Manage tools, workflows, prompts, and comparisons.', '/admin');
 
+const PAGE_SIZE = 20;
+
 type AdminSearchParams = {
   status?: string;
   action?: string;
   message?: string;
+  tools_cursor?: string;
+  workflows_cursor?: string;
+  prompts_cursor?: string;
+  comparisons_cursor?: string;
 };
 
 function formatAction(action?: string) {
   return String(action ?? 'operation').replaceAll('_', ' ');
+}
+
+async function fetchPaginated<T extends { id: string }>(
+  fn: (args: { take: number; cursor?: { id: string }; skip?: number }) => Promise<T[]>,
+  cursor?: string
+) {
+  const take = PAGE_SIZE + 1;
+  const result = await fn({
+    take,
+    ...(cursor && { cursor: { id: cursor }, skip: 1 })
+  });
+  const hasMore = result.length > PAGE_SIZE;
+  const items = hasMore ? result.slice(0, PAGE_SIZE) : result;
+  const nextCursor = hasMore && items.length ? items[items.length - 1]!.id : null;
+  return { items, nextCursor };
 }
 
 export default async function AdminPage({ searchParams }: { searchParams?: AdminSearchParams }) {
@@ -46,17 +67,74 @@ export default async function AdminPage({ searchParams }: { searchParams?: Admin
     );
   }
 
-  const [tools, workflows, prompts, comparisons] = await Promise.all([
-    prisma.tool.findMany({ orderBy: { createdAt: 'desc' } }),
-    prisma.workflow.findMany({ orderBy: { createdAt: 'desc' }, include: { toolsUsed: true } }),
-    prisma.prompt.findMany({ orderBy: { createdAt: 'desc' } }),
-    prisma.comparison.findMany({ orderBy: { createdAt: 'desc' }, include: { tools: true } })
+  const [toolsResult, workflowsResult, promptsResult, comparisonsResult] = await Promise.all([
+    fetchPaginated(
+      (opts) =>
+        prisma.tool.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: opts.take,
+          cursor: opts.cursor,
+          skip: opts.skip
+        }),
+      searchParams?.tools_cursor
+    ),
+    fetchPaginated(
+      (opts) =>
+        prisma.workflow.findMany({
+          orderBy: { createdAt: 'desc' },
+          include: { toolsUsed: true },
+          take: opts.take,
+          cursor: opts.cursor,
+          skip: opts.skip
+        }),
+      searchParams?.workflows_cursor
+    ),
+    fetchPaginated(
+      (opts) =>
+        prisma.prompt.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: opts.take,
+          cursor: opts.cursor,
+          skip: opts.skip
+        }),
+      searchParams?.prompts_cursor
+    ),
+    fetchPaginated(
+      (opts) =>
+        prisma.comparison.findMany({
+          orderBy: { createdAt: 'desc' },
+          include: { tools: true },
+          take: opts.take,
+          cursor: opts.cursor,
+          skip: opts.skip
+        }),
+      searchParams?.comparisons_cursor
+    )
   ]);
+
+  const tools = toolsResult.items;
+  const workflows = workflowsResult.items;
+  const prompts = promptsResult.items;
+  const comparisons = comparisonsResult.items;
 
   const status = searchParams?.status;
   const action = formatAction(searchParams?.action);
   const isSuccess = status === 'success';
   const isError = status === 'error';
+
+  function adminUrl(cursorKey: keyof AdminSearchParams, cursor: string | null) {
+    const p = new URLSearchParams();
+    if (status) p.set('status', status);
+    if (searchParams?.action) p.set('action', searchParams.action);
+    if (searchParams?.message) p.set('message', searchParams.message);
+    if (searchParams?.tools_cursor) p.set('tools_cursor', searchParams.tools_cursor);
+    if (searchParams?.workflows_cursor) p.set('workflows_cursor', searchParams.workflows_cursor);
+    if (searchParams?.prompts_cursor) p.set('prompts_cursor', searchParams.prompts_cursor);
+    if (searchParams?.comparisons_cursor) p.set('comparisons_cursor', searchParams.comparisons_cursor);
+    if (cursor) p.set(cursorKey, cursor);
+    const q = p.toString();
+    return q ? `/admin?${q}` : '/admin';
+  }
 
   return (
     <div className="space-y-10">
@@ -139,6 +217,11 @@ export default async function AdminPage({ searchParams }: { searchParams?: Admin
               </form>
             </details>
           ))}
+          {toolsResult.nextCursor ? (
+            <Link href={adminUrl('tools_cursor', toolsResult.nextCursor)} className="btn-secondary inline-flex">
+              Load more tools
+            </Link>
+          ) : null}
         </div>
       </section>
 
@@ -178,6 +261,11 @@ export default async function AdminPage({ searchParams }: { searchParams?: Admin
               </form>
             </details>
           ))}
+          {workflowsResult.nextCursor ? (
+            <Link href={adminUrl('workflows_cursor', workflowsResult.nextCursor)} className="btn-secondary inline-flex">
+              Load more workflows
+            </Link>
+          ) : null}
         </div>
       </section>
 
@@ -211,6 +299,11 @@ export default async function AdminPage({ searchParams }: { searchParams?: Admin
               </form>
             </details>
           ))}
+          {promptsResult.nextCursor ? (
+            <Link href={adminUrl('prompts_cursor', promptsResult.nextCursor)} className="btn-secondary inline-flex">
+              Load more prompts
+            </Link>
+          ) : null}
         </div>
       </section>
 
@@ -248,6 +341,11 @@ export default async function AdminPage({ searchParams }: { searchParams?: Admin
               </form>
             </details>
           ))}
+          {comparisonsResult.nextCursor ? (
+            <Link href={adminUrl('comparisons_cursor', comparisonsResult.nextCursor)} className="btn-secondary inline-flex">
+              Load more comparisons
+            </Link>
+          ) : null}
         </div>
       </section>
     </div>

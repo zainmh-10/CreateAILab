@@ -6,3 +6,7 @@ export const subscribeSchema = z.object({
   website: z.string().trim().max(0).optional(),
   formStartedAt: z.number().int().positive().optional()
 });
+
+export const newsletterTestSendSchema = z.object({
+  email: z.string().trim().email().max(320)
+});

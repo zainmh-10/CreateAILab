@@ -133,10 +133,12 @@ const intermediatePromptSeeds: PromptTemplate[] = [
     level: 'Intermediate',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `Convert this script into a production sheet: [SCRIPT].
-Return a table with scene number, spoken line, camera framing, visual insert, on screen text, and estimated duration.
-Flag any scene where pacing is likely to drag.
-End with a total runtime estimate and 3 pacing improvements.`
+    content: `Turn this script into a shoot ready production sheet.
+Script: [SCRIPT]
+Format the output as a table with scene number, spoken line, scene objective, camera framing, visual insert or b roll, on screen text, edit cue, and estimated duration.
+Break scenes at idea shifts, not paragraph breaks.
+Flag any scene where pacing is likely to drag because the explanation repeats, the visual does not change, or the payoff arrives too late.
+End with total runtime estimate, drag risk notes, and 3 pacing fixes that improve retention without losing clarity.`
   },
   {
     id: 'i2',
@@ -144,10 +146,15 @@ End with a total runtime estimate and 3 pacing improvements.`
     level: 'Intermediate',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `For this video topic [TOPIC], map the top 7 audience objections that prevent action.
-Write one objection handling segment for each objection.
-Each segment must include empathy, proof, and one actionable next step.
-Place each segment at the best point in a YouTube script timeline.`
+    content: `Build an objection handling map for this YouTube topic: [TOPIC].
+Identify the 7 objections most likely to stop the viewer from believing the claim, trusting the creator, or taking the next step.
+For each objection, return:
+1 the hidden fear behind it
+2 the best place to answer it in the script
+3 a spoken line that handles it naturally on camera
+4 one proof device to support the line such as data, example, demo, or personal result
+5 one transition sentence back into the main narrative.
+End by ranking which objections must be handled early, mid video, and near the CTA.`
   },
   {
     id: 'i3',
@@ -155,18 +162,17 @@ Place each segment at the best point in a YouTube script timeline.`
     level: 'Intermediate',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `You are an expert creator operations strategist.
-Workflow context is 10x YouTube Script Generation.
-Primary goal is rewriting weak sections to improve retention at key timestamps.
-Use this retention data: [RETENTION NOTES].
-Rewrite only the weak zones and preserve the creator voice.
-Output format:
-1 Objective
-2 Step by step repair plan
-3 Ready to use rewritten script block
-4 QA checklist
-5 Next action
-Also provide two alternate rewrites with tradeoffs and include KPI targets for average view duration and 30 second retention.`
+    content: `Repair the weak retention zones in this YouTube script without rewriting the whole piece.
+Retention notes: [RETENTION NOTES]
+For each weak zone, identify the likely reason for the drop such as slow setup, repeated explanation, weak proof, late payoff, or unclear transition.
+Then return:
+1 timestamp or section name
+2 diagnosis
+3 repair tactic
+4 rewritten replacement lines
+5 what visual or edit change should support the rewrite.
+Preserve creator voice and only touch the sections that are hurting retention.
+End with one QA pass that checks whether the repaired script earns a stronger next reason to keep watching.`
   },
   {
     id: 'i4',
@@ -174,11 +180,12 @@ Also provide two alternate rewrites with tradeoffs and include KPI targets for a
     level: 'Intermediate',
     free: false,
     workflow: 'Automated Newsletter Pipeline',
-    content: `Design a newsletter KPI system for [NEWSLETTER NAME].
+    content: `Design a weekly KPI operating sheet for [NEWSLETTER NAME].
 Current metrics: [METRICS].
-Build a weekly dashboard with leading indicators and lagging indicators.
-Include thresholds that trigger subject line testing, content length adjustment, and send time changes.
-Give me a 4 week experiment schedule.`
+Build one working dashboard with acquisition, engagement, monetization, and list health sections.
+For each KPI include the definition, why it matters, healthy range, warning range, and operator action when it drops.
+Add trigger rules for when to test subject lines, shorten copy, change send time, or suppress low intent segments.
+Finish with a four week experiment calendar ordered by fastest likely win.`
   },
   {
     id: 'i5',
@@ -186,10 +193,16 @@ Give me a 4 week experiment schedule.`
     level: 'Intermediate',
     free: false,
     workflow: 'Automated Newsletter Pipeline',
-    content: `Write three versions of one newsletter for these segments: [SEGMENT A], [SEGMENT B], [SEGMENT C].
-Topic is [TOPIC].
-Keep the core lesson consistent but change examples, tone, and CTA by segment intent.
-Show the segment specific subject line and opening paragraph for each version.`
+    content: `Write three segment specific versions of one newsletter.
+Segments: [SEGMENT A], [SEGMENT B], [SEGMENT C]
+Topic: [TOPIC]
+Keep the core lesson the same, but adapt framing, examples, objection handling, and CTA based on what each segment cares about most.
+For each segment, return:
+1 subject line
+2 opening paragraph
+3 one section that changes materially for that segment
+4 CTA and why it fits that audience.
+Finish with one note explaining which version should perform best and why.`
   },
   {
     id: 'i6',
@@ -198,10 +211,11 @@ Show the segment specific subject line and opening paragraph for each version.`
     free: false,
     workflow: 'Automated Newsletter Pipeline',
     content: `Build a 30 day newsletter calendar for [NICHE].
-Need 2 issues per week plus one bonus send.
-For each send provide theme, key story, reader action, and monetization angle.
-Balance educational and conversion focused issues.
-Mark which issues should be evergreen.`
+Publishing requirement: 2 core issues per week plus 1 bonus send.
+For each send, provide the theme, angle, audience intent, key story or teaching point, reader action, and monetization role.
+Balance trust building, demand creation, and direct conversion so the calendar does not feel sales heavy.
+Label which sends are evergreen, which depend on timely context, and which should only deploy when there is a strong offer match.
+End with the best order for week one.`
   },
   {
     id: 'i7',
@@ -209,10 +223,11 @@ Mark which issues should be evergreen.`
     level: 'Intermediate',
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
-    content: `Create a batch of 12 faceless TikTok scripts for [NICHE].
-Each script must include a hook line, core point, visual instruction, and CTA.
-Cap each script at 90 spoken words.
-Sequence scripts so week one builds authority and week two pushes conversion.`
+    content: `Create a two week faceless TikTok batch for [NICHE].
+Write 12 scripts split into 3 authority builders, 3 myth breakers, 3 proof based clips, and 3 conversion leaning clips.
+For each script include hook, spoken body, visual beats, subtitle style cue, and CTA.
+Cap each script at 90 spoken words and make the first sentence usable as an on screen hook.
+Sequence the batch so week one earns trust and week two increases profile clicks or offer intent.`
   },
   {
     id: 'i8',
@@ -220,11 +235,14 @@ Sequence scripts so week one builds authority and week two pushes conversion.`
     level: 'Intermediate',
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
-    content: `Polish these TikTok scripts for voiceover delivery: [SCRIPTS].
-Improve rhythm, sentence length variation, and breath points.
-Mark emphasis words in uppercase.
-Remove tongue twisters and awkward transitions.
-Return final scripts plus a narrator pacing guide.`
+    content: `Polish these TikTok scripts for smoother voiceover delivery: [SCRIPTS].
+Improve rhythm, breath control, emphasis placement, and sentence transitions without changing the core meaning.
+Mark emphasis words in uppercase and insert slash marks where a narrator should pause.
+Remove phrases that feel robotic, overly long, or awkward to say out loud.
+Return:
+1 clean final scripts
+2 narrator pacing notes
+3 one line on where the energy should rise or soften in each script.`
   },
   {
     id: 'i9',
@@ -232,10 +250,15 @@ Return final scripts plus a narrator pacing guide.`
     level: 'Intermediate',
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
-    content: `Generate visual prompt sets for 10 faceless TikTok videos in [NICHE].
-For each video provide one image generation prompt, one B roll search prompt, and one caption style direction.
-Ensure visual tone is consistent across the set.
-Add a do not use list to protect brand style.`
+    content: `Generate a visual prompt pack for 10 faceless TikTok videos in [NICHE].
+For each video, provide:
+1 image generation prompt
+2 B roll search prompt
+3 motion or transition direction
+4 caption style note
+5 one visual mistake to avoid.
+Keep the full set visually consistent so the channel feels recognizable, not random.
+End with a shared do not use list that protects brand feel across all 10 videos.`
   },
   {
     id: 'i10',
@@ -243,10 +266,17 @@ Add a do not use list to protect brand style.`
     level: 'Intermediate',
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
-    content: `Take this article and build a repurposing matrix: [ARTICLE].
-Output a matrix for LinkedIn, X, Instagram, YouTube Shorts, and email.
-For each platform define content format, hook angle, word count target, and CTA.
-Include one KPI per platform that indicates successful adaptation.`
+    content: `Turn this article into a platform conversion matrix: [ARTICLE].
+Create one row each for LinkedIn, X, Instagram, YouTube Shorts, and email.
+For every platform define:
+1 native content format
+2 audience intent at that touchpoint
+3 opening angle
+4 core takeaway to preserve
+5 recommended CTA
+6 success KPI
+7 one mistake that would make the asset feel copied instead of native.
+End with the best publishing order if all assets launch from the same source piece.`
   },
   {
     id: 'i11',
@@ -254,11 +284,12 @@ Include one KPI per platform that indicates successful adaptation.`
     level: 'Intermediate',
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
-    content: `Rewrite this blog into a thought leadership LinkedIn post.
-Source: [BLOG TEXT].
-Use a personal insight opener, one contrarian claim, one practical framework, and a discussion CTA.
-Do not sound academic.
-Keep the final post between 180 and 240 words.`
+    content: `Rewrite this blog into a LinkedIn thought leadership post.
+Source: [BLOG TEXT]
+Use a personal insight opener, one strong point of view, one practical framework, and a comment generating close.
+Make it sound like an operator sharing a hard won lesson, not a brand rep or essay writer.
+Keep the post between 180 and 240 words.
+Also provide one backup opener if the first opener feels too polished or too safe.`
   },
   {
     id: 'i12',
@@ -266,10 +297,14 @@ Keep the final post between 180 and 240 words.`
     level: 'Intermediate',
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
-    content: `From this source content [SOURCE], create one email teaser and four social teaser variants.
-Each social teaser must target a different emotional trigger.
-Email teaser must drive clicks without revealing the full lesson.
-Return all outputs with a matching CTA strategy.`
+    content: `Use this source content to create one email teaser and four social teaser variants: [SOURCE].
+Each social teaser should lean on a different trigger such as curiosity, urgency, proof, status, or pain.
+The email teaser should create enough intrigue to earn the click without giving away the full lesson.
+Return each asset with:
+1 hook
+2 body copy
+3 CTA
+4 why that CTA fits the asset's intent.`
   },
   {
     id: 'i13',
@@ -277,10 +312,16 @@ Return all outputs with a matching CTA strategy.`
     level: 'Intermediate',
     free: false,
     workflow: 'Podcast to Clips Production System',
-    content: `Package these identified podcast clips for distribution: [CLIP NOTES].
-For each clip write title, opening subtitle line, caption copy, and hashtag set.
-Specify which clip fits Shorts, Reels, or TikTok best and why.
-Prioritize clips likely to generate saves and shares.`
+    content: `Package these podcast clips for distribution: [CLIP NOTES].
+For each clip, return a packaging card with:
+1 platform fit ranking
+2 title
+3 first subtitle line
+4 caption
+5 comment pin prompt
+6 reason this clip earns a save, share, or profile click.
+Also note whether the clip should be framed as insight, controversy, story, or practical advice.
+Prioritize clips with a strong opening payoff in the first 2 seconds.`
   },
   {
     id: 'i14',
@@ -288,10 +329,14 @@ Prioritize clips likely to generate saves and shares.`
     level: 'Intermediate',
     free: false,
     workflow: 'Podcast to Clips Production System',
-    content: `Turn this transcript into listener assets: [TRANSCRIPT].
-Return episode summary, 6 chapter markers, key quotes, and a one minute host read recap.
-Highlight one signature insight that can become a recurring series theme.
-Keep language natural and listener focused.`
+    content: `Turn this transcript into listener ready podcast assets: [TRANSCRIPT].
+Return:
+1 episode summary
+2 six chapter markers with timestamp labels
+3 best quotes
+4 one minute host read recap
+5 one signature insight that deserves to become a recurring theme.
+Keep the language natural, specific, and listener first rather than generic show notes copy.`
   },
   {
     id: 'i15',
@@ -299,10 +344,11 @@ Keep language natural and listener focused.`
     level: 'Intermediate',
     free: false,
     workflow: 'Podcast to Clips Production System',
-    content: `Build a 14 day distribution plan for 10 podcast clips.
-Inputs: [CLIP LIST], [AUDIENCE PROFILE].
-For each day assign platform, posting time, caption intent, and engagement follow up action.
-Include rule based adjustments if first 3 posts underperform.`
+    content: `Build a 14 day distribution sequence for 10 podcast clips.
+Inputs: [CLIP LIST], [AUDIENCE PROFILE]
+For each day assign the clip, platform, posting window, caption intent, CTA style, and one follow up engagement action.
+Sequence the clips so awareness clips warm the audience before stronger conversion or authority clips go live.
+Add rule based adjustments for what to do if the first 3 posts underperform on watch time, saves, or profile clicks.`
   },
   {
     id: 'i16',
@@ -310,10 +356,12 @@ Include rule based adjustments if first 3 posts underperform.`
     level: 'Intermediate',
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
-    content: `Write a conversion focused landing page for this lead magnet: [OFFER].
-Audience pain point: [PAIN].
-Include headline, subhead, benefit bullets, proof section, FAQ, and final CTA block.
-Provide two headline options with different persuasion angles.`
+    content: `Write a landing page draft for this lead magnet: [OFFER].
+Primary pain point: [PAIN].
+Return the page in conversion order: hero, proof, benefit stack, what is inside, who it is for, FAQ, CTA close.
+Write two hero directions with different persuasion angles: one pain led and one outcome led.
+Make the benefit bullets specific, not generic, and tie each one to a likely reader question.
+Add one short objection handling block before the final CTA.`
   },
   {
     id: 'i17',
@@ -321,10 +369,11 @@ Provide two headline options with different persuasion angles.`
     level: 'Intermediate',
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
-    content: `Create a 5 email opt in nurture sequence after someone downloads [LEAD MAGNET].
-Goal is move subscriber from free value to next paid step.
-Define objective for each email, key message, and CTA.
-Include one re engagement email if no clicks by day 4.`
+    content: `Create a 5 email nurture sequence for someone who downloaded [LEAD MAGNET].
+Goal: move the subscriber from free value to the next paid or booked step without breaking trust.
+For each email, define the job of the email, core message, open loop if relevant, CTA, and what belief it should strengthen.
+Include one re engagement email for subscribers who have not clicked by day 4.
+Keep the sequence progressive so each email earns the next one.`
   },
   {
     id: 'i18',
@@ -332,11 +381,15 @@ Include one re engagement email if no clicks by day 4.`
     level: 'Intermediate',
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
-    content: `Write an affiliate bridge email tied to this lead magnet: [LEAD MAGNET].
-Affiliate offer: [OFFER].
-Use story plus proof plus transition structure.
-Avoid hard sell language.
-End with a credibility anchored CTA and one plain text version.`
+    content: `Write an affiliate bridge email connected to this lead magnet: [LEAD MAGNET].
+Affiliate offer: [OFFER]
+Use a story to bridge from the lead magnet problem into the affiliate solution, then support the transition with proof and a low pressure CTA.
+Avoid hard sell language, forced urgency, or exaggerated claims.
+Return:
+1 primary email
+2 plain text version
+3 subject line options
+4 one note explaining why the bridge feels natural instead of salesy.`
   },
   {
     id: 'i19',
@@ -345,9 +398,10 @@ End with a credibility anchored CTA and one plain text version.`
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
     content: `Transform these raw prompts into a sellable prompt pack: [RAW PROMPTS].
-For each prompt provide use case, expected output, input fields, and quick win example.
-Group prompts by beginner, growth, and scaling goals.
-Add concise usage notes for non technical users.`
+For each prompt, provide a productized card with title, use case, expected output, required inputs, best fit user, and a quick win example.
+Group the pack by beginner, growth, and scaling use cases so the buyer can understand progression.
+Add concise usage notes written for non technical users.
+End with a recommended table of contents and one bundle positioning line for the full pack.`
   },
   {
     id: 'i20',
@@ -355,10 +409,15 @@ Add concise usage notes for non technical users.`
     level: 'Intermediate',
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
-    content: `Refine positioning for this offer: [OFFER DETAILS].
-Target segment: [SEGMENT].
-Return positioning statement, differentiator, proof narrative, and objection responses.
-Then write one homepage hero block and one lead magnet bridge paragraph aligned to that position.`
+    content: `Refine the positioning for this offer: [OFFER DETAILS].
+Target segment: [SEGMENT]
+Return:
+1 positioning statement
+2 who it is for and not for
+3 differentiator
+4 proof narrative
+5 top objections with concise responses.
+Then write one homepage hero block and one lead magnet bridge paragraph that both express the same position in different contexts.`
   }
 ];
 
@@ -369,12 +428,17 @@ const advancedPromptSeeds: PromptTemplate[] = [
     level: 'Advanced',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `Build a high confidence hook testing engine for a YouTube video.
-Inputs: topic [TOPIC], audience segments [SEGMENTS], channel baseline retention [BASELINE].
-Produce 24 hooks mapped to segment intent and awareness stage.
-Create a pre publish scoring model using novelty, clarity, and promise credibility.
-Define exact accept reject rules so only top scoring hooks move to production.
-Return final selection with expected first 30 second retention lift and rationale.`
+    content: `Build a high confidence YouTube hook testing engine for one topic.
+Inputs:
+Topic: [TOPIC]
+Audience segments: [SEGMENTS]
+Channel baseline retention: [BASELINE]
+Recent title and thumbnail patterns: [PATTERNS]
+Generate 24 hooks distributed across awareness stage, emotional trigger, and promise type.
+Score every hook on novelty, specificity, credibility, tension, thumbnail compatibility, and likely retention impact in the first 30 seconds.
+Create a weighted model with clear pass, hold, and reject bands.
+Then shortlist the top 5 hooks, show why each could win, what could make it fail, and which thumbnail pairing best supports it.
+End with the single production recommendation plus a backup choice if the top hook is too risky for the current audience.`
   },
   {
     id: 'a2',
@@ -382,11 +446,12 @@ Return final selection with expected first 30 second retention lift and rational
     level: 'Advanced',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `Engineer a narrative arc for this script draft: [SCRIPT].
-Objective is maximize watch duration without inflating runtime.
-Map emotional state transitions every 45 seconds.
-Insert proof events, pattern interrupts, and tension resets at the moments most likely to prevent drop off.
-Deliver revised script map plus timing chart and risk notes for monotony zones.`
+    content: `Engineer a retention optimized narrative arc for this script draft: [SCRIPT].
+Objective: maximize watch duration without bloating runtime.
+Map the viewer's emotional state, clarity level, and curiosity level every 45 seconds.
+Identify where the script is spending attention without earning it, where proof arrives too late, and where tension goes flat.
+Rebuild the arc with proof events, pattern interrupts, payoff checkpoints, and tension resets positioned where drop off is most likely.
+Return the revised narrative map, timing chart, monotony risks, and one section that should be cut entirely if runtime needs tightening.`
   },
   {
     id: 'a3',
@@ -394,12 +459,12 @@ Deliver revised script map plus timing chart and risk notes for monotony zones.`
     level: 'Advanced',
     free: false,
     workflow: '10x YouTube Script Generation',
-    content: `Design a weighted script quality rubric for YouTube production teams.
-Must score hook strength, audience relevance, proof density, pacing, and CTA alignment.
-Each category needs explicit scoring anchors from 1 to 5.
-Add hard fail criteria that block publishing.
-Then apply the rubric to this script: [SCRIPT].
-Return score, failure points, and exact rewrite instructions by section.`
+    content: `Design a weighted script quality rubric for a YouTube production team.
+The rubric must score hook strength, audience relevance, novelty, proof density, pacing, retention logic, and CTA alignment.
+Each category needs clear scoring anchors from 1 to 5, plus examples of what good and bad looks like.
+Add hard fail criteria that should block a script from moving into production.
+Then apply the rubric to this script: [SCRIPT]
+Return the total score, category breakdown, fail points, and exact rewrite instructions by section in priority order.`
   },
   {
     id: 'a4',
@@ -408,10 +473,15 @@ Return score, failure points, and exact rewrite instructions by section.`
     free: false,
     workflow: '10x YouTube Script Generation',
     content: `Fork one core YouTube script into 3 persona tuned versions.
-Personas: [P1], [P2], [P3].
-Keep central teaching identical while changing framing, examples, and objection handling.
-For each persona include recommended title, thumbnail direction, and opening 20 seconds.
-End with a deployment rule that says which version should publish first based on channel analytics.`
+Personas: [P1], [P2], [P3]
+Keep the core teaching identical while changing framing, examples, proof order, objection handling, and CTA emphasis for each persona.
+For every version, include:
+1 title direction
+2 thumbnail concept
+3 opening 20 seconds
+4 the main belief shift the script should create
+5 the reason this persona version could outperform the base version.
+End with a deployment rule for which version should publish first and what channel data should determine the winner.`
   },
   {
     id: 'a5',
@@ -420,10 +490,11 @@ End with a deployment rule that says which version should publish first based on
     free: false,
     workflow: '10x YouTube Script Generation',
     content: `Create a 30 day YouTube topic cluster strategy around [CORE THEME].
-Design 12 videos that compound authority and naturally lead to [BUSINESS GOAL].
-Map dependencies so each episode references a previous insight and tees up the next one.
-Include expected audience journey from discovery to conversion.
-Provide kill criteria for weak topic branches after week two.`
+Design 12 videos that compound authority and move viewers toward [BUSINESS GOAL].
+Map dependencies so each video pays off a previous curiosity loop and tees up the next one.
+Separate the cluster into discovery, depth, proof, and conversion roles.
+Include the expected audience journey from first touch to repeat view to action.
+Provide kill criteria for weak branches after week two and expansion rules for branches that outperform.`
   },
   {
     id: 'a6',
@@ -432,10 +503,20 @@ Provide kill criteria for weak topic branches after week two.`
     free: false,
     workflow: 'Automated Newsletter Pipeline',
     content: `Architect a revenue mapped newsletter system for [NEWSLETTER].
-Inputs: audience segments, offer stack, current monetization data.
-Assign each newsletter block to one monetization purpose such as trust building, demand creation, or direct conversion.
-Create a send sequence that maximizes long term revenue per subscriber.
-Output monetization map, editorial rules, and measurement model.`
+Inputs:
+Audience segments: [SEGMENTS]
+Offer stack: [OFFERS]
+Current monetization data: [MONETIZATION DATA]
+Email performance history: [EMAIL HISTORY]
+Map the newsletter into revenue functions such as trust building, problem agitation, demand creation, objection handling, and direct conversion.
+For each function, specify which segment should receive it, what copy pattern fits best, and what offer it should advance.
+Design the send sequence so short term revenue does not cannibalize long term subscriber value.
+Return:
+1 revenue map by segment
+2 editorial rules by email block
+3 monetization cadence by week
+4 measurement model for revenue per subscriber, click to sale rate, and unsubscribe risk
+5 intervention rules when monetization rises but trust signals fall.`
   },
   {
     id: 'a7',
@@ -443,11 +524,11 @@ Output monetization map, editorial rules, and measurement model.`
     level: 'Advanced',
     free: false,
     workflow: 'Automated Newsletter Pipeline',
-    content: `Design a failure resilient newsletter automation protocol.
+    content: `Design a failure resilient newsletter automation recovery protocol.
 Stack includes content generation, approval, scheduling, and delivery.
-Define failure modes, early warning signals, fallback actions, and owner accountability for each mode.
-Add an emergency manual send workflow that preserves brand quality under time pressure.
-Return runbook format ready for team adoption.`
+Define the major failure modes, earliest warning signals, fallback actions, owner accountability, and recovery time target for each one.
+Add an emergency manual send workflow that protects brand quality under time pressure.
+Return the plan as a runbook with severity levels, response steps, escalation logic, and a short postmortem template for repeat incidents.`
   },
   {
     id: 'a8',
@@ -456,10 +537,13 @@ Return runbook format ready for team adoption.`
     free: false,
     workflow: 'Automated Newsletter Pipeline',
     content: `Build a personalization model for newsletter offers across segments.
-Inputs: segment behavior data [DATA], offers [OFFERS], send history [HISTORY].
-Define decision logic for which offer narrative should appear for each segment.
-Generate personalized offer blocks for top 4 segments.
-Include compliance guardrails and over personalization risk controls.`
+Inputs:
+Segment behavior data: [DATA]
+Offers: [OFFERS]
+Send history: [HISTORY]
+Define the decision logic that determines which offer narrative, proof angle, and CTA should appear for each segment.
+Generate personalized offer blocks for the top 4 segments and explain why each version fits the segment's buying state.
+Include compliance guardrails, over personalization risk controls, and fallback logic for low confidence segmentation.`
   },
   {
     id: 'a9',
@@ -468,10 +552,10 @@ Include compliance guardrails and over personalization risk controls.`
     free: false,
     workflow: 'Automated Newsletter Pipeline',
     content: `Create an editorial risk scanner for newsletter drafts.
-It must detect credibility gaps, legal exposure, unsupported claims, and tone mismatch with brand standards.
-Produce a pass fail checklist and a severity ranking model.
-Run the scanner against this draft: [DRAFT].
-Return corrected copy for all high severity flags only.`
+It must detect credibility gaps, legal exposure, unsupported claims, compliance risk, and tone mismatch with brand standards.
+Produce a pass fail checklist, a severity ranking model, and a rule for what must be fixed before send approval.
+Run the scanner against this draft: [DRAFT]
+Return only the high severity issues, why each matters, and corrected copy for those specific sections.`
   },
   {
     id: 'a10',
@@ -481,9 +565,10 @@ Return corrected copy for all high severity flags only.`
     workflow: 'Automated Newsletter Pipeline',
     content: `Plan an 8 week newsletter experimentation roadmap.
 Constraints: fixed list size, limited design resources, weekly send cadence.
-Prioritize tests with highest expected lift in open rate, click rate, and revenue per send.
-For each week define hypothesis, test design, success threshold, and next action rule.
-Include a stop loss mechanism for experiments that reduce trust signals.`
+Prioritize tests by expected lift, speed to learn, and downside risk to trust.
+For each week define the hypothesis, variable being tested, test design, success threshold, rollback rule, and next action if the test wins or loses.
+Include a stop loss mechanism for experiments that reduce trust signals such as replies, unsubscribes, or spam complaints.
+End with the best first experiment if the team can only run one.`
   },
   {
     id: 'a11',
@@ -491,11 +576,12 @@ Include a stop loss mechanism for experiments that reduce trust signals.`
     level: 'Advanced',
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
-    content: `Design a faceless TikTok series architecture for 4 weeks in niche [NICHE].
-Create 3 recurring series pillars with clear audience promise.
-For each pillar define hook style, visual grammar, and CTA progression.
-Map how each video advances viewers from passive consumption to profile click and then to lead capture.
-Return a calendar plus production batching logic.`
+    content: `Design a four week faceless TikTok series architecture for [NICHE].
+Build 3 recurring series pillars with distinct jobs: discovery, authority, and conversion.
+For each pillar define audience promise, recurring hook structure, visual grammar, text overlay style, editing rhythm, and CTA progression.
+Map how a viewer can move from first exposure to repeat watch to profile click to lead capture across the series.
+Add anti fatigue rules so the channel does not feel repetitive by week three.
+Return series logic, publishing calendar, batching plan, and performance checkpoints for when a pillar should be scaled, revised, or replaced.`
   },
   {
     id: 'a12',
@@ -503,11 +589,12 @@ Return a calendar plus production batching logic.`
     level: 'Advanced',
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
-    content: `Analyze first 3 seconds performance for these clips: [CLIP METRICS].
-Diagnose why viewers drop or stay by hook type, pacing, and visual reveal timing.
-Generate redesigned openings for underperforming clips.
-Each redesign must include exact spoken line, first shot instruction, and subtitle rhythm.
-Add predicted retention gain with confidence level.`
+    content: `Analyze first 3 second performance for these clips: [CLIP METRICS].
+Diagnose why viewers drop or stay based on hook type, visual reveal timing, subtitle rhythm, pacing, and clarity of promise.
+Cluster the clips into winning patterns and failure patterns.
+Generate redesigned openings for the underperformers.
+Each redesign must include the exact spoken line, first shot instruction, subtitle rhythm, and what should be visually withheld until the payoff.
+Add predicted retention gain and confidence level for each redesign.`
   },
   {
     id: 'a13',
@@ -516,10 +603,13 @@ Add predicted retention gain with confidence level.`
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
     content: `Develop a reusable creative direction system for a faceless TikTok brand.
-Inputs: brand personality [BRAND], audience profile [AUDIENCE], business goal [GOAL].
-Define non negotiable style rules for color mood, pacing, text overlays, and sound design.
-Include quality gates that prevent off brand outputs.
-Return a master prompt and a short operator guide for editors.`
+Inputs:
+Brand personality: [BRAND]
+Audience profile: [AUDIENCE]
+Business goal: [GOAL]
+Define non negotiable style rules for color mood, pacing, text overlays, sound design, camera movement simulation, and edit density.
+Include quality gates that prevent off brand outputs and drift over time.
+Return a master system prompt, editor operating guide, and a quick audit checklist to judge whether a new asset belongs on the channel.`
   },
   {
     id: 'a14',
@@ -528,10 +618,11 @@ Return a master prompt and a short operator guide for editors.`
     free: false,
     workflow: 'Faceless TikTok Channel Setup',
     content: `Create a comment driven content optimization loop.
-Input set is comment export from last 30 videos: [COMMENTS].
-Cluster comments by confusion, demand, objection, and testimonial signal.
-Translate clusters into next 15 video concepts with priority scoring.
-Provide a weekly process for repeating this loop with minimal manual effort.`
+Input set: comment export from the last 30 videos [COMMENTS]
+Cluster comments by confusion, demand, objection, testimonial, skepticism, and repeat request.
+Translate the clusters into the next 15 video concepts with priority scoring based on demand, strategic fit, and conversion potential.
+Also define what should go into content, what should go into community replies, and what should be ignored.
+Provide a weekly operating process for repeating the loop with minimal manual effort.`
   },
   {
     id: 'a15',
@@ -539,11 +630,20 @@ Provide a weekly process for repeating this loop with minimal manual effort.`
     level: 'Advanced',
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
-    content: `Design an automation blueprint that repurposes one long form blog into 7 platform specific assets.
-Inputs: article text, brand voice rules, channel priorities.
-Define transformation logic per platform including format constraints and CTA intent.
-Add approval checkpoints and rollback conditions when quality falls below threshold.
-Return system map and implementation steps by tool.`
+    content: `Design an automation blueprint that converts one long form blog into 7 platform specific assets.
+Inputs:
+Article text: [ARTICLE TEXT]
+Brand voice rules: [VOICE RULES]
+Channel priorities: [CHANNEL PRIORITIES]
+Available tools: [TOOLS]
+Define the transformation logic for each destination asset, including what must stay constant, what must be rewritten, and what must be removed for platform fit.
+Specify automation steps, human review checkpoints, fallback behavior when source content is weak, and rollback rules when output quality drops below threshold.
+Return:
+1 system map
+2 step by step implementation flow by tool
+3 QA checklist
+4 failure modes
+5 a recommendation for which steps should never be fully automated.`
   },
   {
     id: 'a16',
@@ -552,10 +652,10 @@ Return system map and implementation steps by tool.`
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
     content: `Build a voice consistency enforcement protocol for multi platform content.
-Use this style reference: [STYLE GUIDE].
-Create measurable voice markers and disallowed language patterns.
-Apply protocol to this content batch: [BATCH].
-Return corrected versions plus a compliance scorecard for each platform asset.`
+Style reference: [STYLE GUIDE]
+Create measurable voice markers, approved phrasing patterns, and disallowed language patterns.
+Apply the protocol to this content batch: [BATCH]
+Return corrected versions, a compliance scorecard for each asset, and a list of recurring drift issues the team should watch for in future outputs.`
   },
   {
     id: 'a17',
@@ -564,9 +664,10 @@ Return corrected versions plus a compliance scorecard for each platform asset.`
     free: false,
     workflow: 'Blog to Multi Platform Repurposing',
     content: `Craft an omnichannel narrative sequence from one flagship article.
-Goal is guide audience from awareness to action across LinkedIn, X, email, and short video captions.
-Define the specific message handoff between channels so each asset builds on the previous one.
-Output sequence timeline, content briefs, and conversion intent by touchpoint.`
+Goal: move the audience from awareness to belief to action across LinkedIn, X, email, and short video captions.
+Define the exact message handoff between channels so each asset advances the story rather than repeating it.
+For each touchpoint, specify narrative role, audience state, key message, CTA, and what curiosity should carry into the next channel.
+Return the full sequence timeline, content briefs, and conversion intent by touchpoint.`
   },
   {
     id: 'a18',
@@ -575,10 +676,15 @@ Output sequence timeline, content briefs, and conversion intent by touchpoint.`
     free: false,
     workflow: 'Podcast to Clips Production System',
     content: `Engineer a podcast clip funnel that drives listeners to a clear conversion event.
-Inputs: episode transcript [TRANSCRIPT], offer [OFFER], audience stage map [STAGES].
-Select clip moments by funnel stage and intent.
-Write packaging copy for each stage and define CTA progression.
-Include attribution tracking plan to measure which clips generate conversions.`
+Inputs:
+Episode transcript: [TRANSCRIPT]
+Offer: [OFFER]
+Audience stage map: [STAGES]
+Current clip metrics if available: [METRICS]
+Select clip moments by funnel stage, intent, and emotional payoff.
+For each chosen clip define the job it performs in the funnel, the packaging angle, the CTA, and the next best asset the viewer should consume.
+Design attribution assumptions so the team can tell whether awareness clips, belief clips, or offer clips are doing the real conversion work.
+Return funnel map, selected clips, packaging system, CTA ladder, and measurement plan with failure triggers if clip views rise but assisted conversions do not.`
   },
   {
     id: 'a19',
@@ -587,9 +693,14 @@ Include attribution tracking plan to measure which clips generate conversions.`
     free: false,
     workflow: 'Podcast to Clips Production System',
     content: `Mine this transcript for proprietary insights and reusable frameworks: [TRANSCRIPT].
-Extract novel claims, practical methods, and quote worthy lines.
-Group findings into themes that can power future episodes and short clips.
-Return insight inventory, content opportunities, and editorial gaps to fill in next recording.`
+Extract novel claims, practical methods, recurring ideas, quote worthy lines, and any frameworks that could become signature intellectual property.
+Group findings into themes that can power future long form episodes, short clips, newsletters, and lead magnets.
+Return:
+1 insight inventory
+2 strongest reusable frameworks
+3 content opportunities
+4 ideas that need stronger proof next time
+5 editorial gaps to fill in the next recording.`
   },
   {
     id: 'a20',
@@ -598,131 +709,238 @@ Return insight inventory, content opportunities, and editorial gaps to fill in n
     free: false,
     workflow: 'Lead Magnet Prompt Funnel',
     content: `Design an end to end lead magnet lifecycle optimizer.
-Inputs: traffic sources [SOURCES], lead magnet [MAGNET], email sequence data [EMAIL DATA], sales outcomes [SALES DATA].
-Map leakage points from click to opt in to nurture to conversion.
-Prescribe precise fixes for each leakage point with expected metric impact.
-Output a 21 day implementation plan with daily actions, owners, and validation KPIs.`
+Inputs:
+Traffic sources: [SOURCES]
+Lead magnet: [MAGNET]
+Email sequence data: [EMAIL DATA]
+Sales outcomes: [SALES DATA]
+Funnel benchmarks if available: [BENCHMARKS]
+Map leakage points from click to opt in to nurture to conversion to qualified sale.
+For each leakage point, diagnose likely cause, evidence needed, recommended fix, expected metric impact, and what should be tested before rolling the fix out broadly.
+Separate quick wins from structural fixes.
+Return a 21 day implementation plan with daily actions, owners, validation KPIs, and escalation rules for when opt ins improve but lead quality or downstream conversion gets worse.`
   }
 ];
 
+type PromptArchetype =
+  | 'production'
+  | 'editorial'
+  | 'planning'
+  | 'analysis'
+  | 'systems';
+
+function getPromptArchetype(prompt: PromptTemplate): PromptArchetype {
+  const title = prompt.title.toLowerCase();
+
+  if (/shot|visual|clip packaging|formatter|creative direction/.test(title)) {
+    return 'production';
+  }
+
+  if (/rewrite|writer|draft|copy|voiceover|positioning|personalization|teaser|bridge email|landing/.test(title)) {
+    return 'editorial';
+  }
+
+  if (/planner|calendar|sequence|roadmap|cluster|architecture/.test(title)) {
+    return 'planning';
+  }
+
+  if (/retention|analyzer|scanner|miner|qa|failure|objection|rubric/.test(title)) {
+    return 'analysis';
+  }
+
+  return 'systems';
+}
+
+function buildIntermediateExecutionFrame(prompt: PromptTemplate) {
+  switch (getPromptArchetype(prompt)) {
+    case 'production':
+      return `Production handoff:
+Build the answer so it can be dropped into a production doc today.
+State missing assumptions and give one fast validation step for each before filming or editing starts.
+Provide two execution routes: lean creator version and upgraded production version, with effort versus payoff tradeoffs.
+Set KPI targets for retention, clarity, and conversion intent.
+Close with a seven day action sequence that a creator operator can run immediately.`;
+    case 'editorial':
+      return `Editorial operating brief:
+Return copy that is ready to publish or ready to hand to an editor with minimal cleanup.
+Call out assumptions about audience intent, offer fit, and tone, then show how to validate each in under one day.
+Provide two editorial directions with tradeoffs in speed, distinctiveness, and conversion intent.
+Define KPI targets tied to readability, retention, and click or reply behavior.
+End with a seven day execution rhythm covering draft, review, publish, and optimization.`;
+    case 'planning':
+      return `Execution planning brief:
+Structure the answer like a working plan, not a brainstorm.
+List assumptions, dependencies, and the fastest way to test each one before resources are committed.
+Provide a conservative path and a higher upside path, with clear tradeoffs in effort, risk, and likely performance.
+Attach KPI targets that determine whether the plan is on track by day 3 and day 7.
+Return the final answer in an operator friendly format with dates, owners, and next actions.`;
+    case 'analysis':
+      return `Diagnostic brief:
+Treat this as a performance investigation with a fix plan attached.
+State what you are assuming, what evidence would confirm or reject it, and the fastest way to get that evidence.
+Offer two remediation paths with tradeoffs in speed, complexity, and expected lift.
+Define KPI targets for the repaired asset or workflow and specify what should improve first.
+End with a seven day repair sequence that moves from diagnosis to implementation to review.`;
+    case 'systems':
+    default:
+      return `Operator brief:
+Make the output implementation ready rather than conceptual.
+Spell out assumptions, operating constraints, and fast validation steps before recommending actions.
+Provide two workable approaches with tradeoff analysis across retention, clarity, and conversion intent.
+Define KPI targets and a seven day execution sequence with concrete actions.
+Return the final answer in a format a creator operator can run immediately.`;
+  }
+}
+
+function buildAdvancedExecutionFrame(prompt: PromptTemplate) {
+  switch (getPromptArchetype(prompt)) {
+    case 'production':
+      return `Production systems command brief:
+Treat this as a multi stakeholder handoff for creator, editor, producer, and operator.
+Map assumptions, dependencies, resource bottlenecks, QA checkpoints, and likely failure points before recommending the build.
+Design a primary production path plus a fallback path for low time, low budget, or low asset availability scenarios.
+Add instrumentation for retention, pacing, scene density, and conversion intent, including thresholds for iterate, escalate, or cut.
+Finish with a 30 day optimization loop, weekly review checkpoints, and a red team critique with mitigation actions.`;
+    case 'editorial':
+      return `Editorial control brief:
+Treat this as a high stakes messaging system, not a one off draft.
+State audience assumptions, persuasion risks, compliance or brand risks, and dependencies that could weaken performance.
+Provide a primary editorial architecture plus a secondary architecture, with tradeoffs in speed, authority, retention, and conversion.
+Include instrumentation for open rate, hold rate, click depth, reply intent, and downstream conversion where relevant.
+Return a 30 day optimization system with review checkpoints, kill criteria, and a red team section that attacks weak claims and messaging gaps.`;
+    case 'planning':
+      return `Strategic planning command brief:
+Build an execution system that can survive real world constraints, not an idealized roadmap.
+Make assumptions, dependencies, staffing limits, and sequencing risks explicit before setting the plan.
+Provide one lower risk route and one higher leverage route, then define exactly when the team should switch between them.
+Add leading and lagging KPI targets, decision thresholds, and escalation triggers for missed milestones.
+Close with a 30 day operating sequence, weekly review cadence, and a red team critique of the plan's weakest points.`;
+    case 'analysis':
+      return `Performance diagnostics command brief:
+Treat the response as a fault isolation and optimization document for an execution team.
+Identify root cause hypotheses, evidence required, failure modes, and measurement blind spots before prescribing fixes.
+Provide a primary fix path and a counter hypothesis path, with tradeoffs in confidence, speed, and expected upside.
+Define decision thresholds for scale, iterate, hold, or stop based on leading and lagging indicators.
+Return a 30 day optimization system with weekly checkpoints, instrumentation design, and a red team pass on misread signals or false positives.`;
+    case 'systems':
+    default:
+      return `Systems architecture brief:
+Treat this as a high stakes operator brief that must be deployable without follow up clarification.
+State assumptions, dependencies, edge cases, and failure points explicitly before giving recommendations.
+Include a primary architecture and a secondary architecture, with tradeoffs in complexity, speed, resilience, and conversion impact.
+Add instrumentation plan with leading and lagging indicators plus thresholds that trigger scale, iterate, or rollback decisions.
+Return a 30 day optimization system with weekly checkpoints, escalation logic, and a red team critique with mitigation steps.`;
+  }
+}
+
 const workflowContext = {
   '10x YouTube Script Generation': {
-    intermediate: `Context pack:
+    intermediate: `YouTube operating context:
 Creator profile: [CREATOR TYPE]
 Content pillar: [CONTENT PILLAR]
 Average view duration baseline: [AVD BASELINE]
 Primary traffic source: [TRAFFIC SOURCE]
 Core conversion event: [CONVERSION EVENT]
 Make each recommendation improve retention, clarity, and conversion intent.`,
-    advanced: `Strategic context:
+    advanced: `YouTube strategy stack:
 Channel stage: [CHANNEL STAGE]
 Recent 10 video performance summary: [PERFORMANCE SNAPSHOT]
 Audience sophistication level: [AWARENESS LEVEL]
 Production constraints: [TEAM SIZE], [EDITING CAPACITY], [PUBLISH CADENCE]
 Monetization target tied to this content: [REVENUE GOAL]
-System requirements:
+System pressure test:
 Use explicit decision rules, include pre publish QA gates, and define post publish optimization triggers from actual watch behavior.`
   },
   'Automated Newsletter Pipeline': {
-    intermediate: `Context pack:
+    intermediate: `Newsletter operating context:
 Newsletter model: [NEWSLETTER MODEL]
 Primary segment and intent: [SEGMENT]
 Current baseline metrics: [OPEN RATE], [CLICK RATE], [REPLY RATE]
 Offer being supported: [OFFER]
 Keep output aligned to weekly execution reality and measurable improvement.`,
-    advanced: `Strategic context:
+    advanced: `Newsletter strategy stack:
 Monetization architecture: [OFFERS], [LTV TARGET], [SEASONAL GOALS]
 Data environment: [ANALYTICS STACK], [TRACKING LIMITS]
 Operational constraints: [WRITING CAPACITY], [DESIGN CAPACITY], [APPROVAL SLA]
-System requirements:
+System pressure test:
 Include risk controls for reputation and compliance, define experiment stop rules, and provide a feedback loop that compounds subscriber value month over month.`
   },
   'Faceless TikTok Channel Setup': {
-    intermediate: `Context pack:
+    intermediate: `Short form operating context:
 Niche and audience promise: [NICHE], [PROMISE]
 Posting cadence: [CADENCE]
 Production stack: [TOOLS]
 Current performance baseline: [VIEW BASELINE], [HOLD RATE]
 Optimize for watch through, repeatability, and low friction production.`,
-    advanced: `Strategic context:
+    advanced: `Short form strategy stack:
 Channel growth objective: [GROWTH GOAL]
 Creative constraints: [VISUAL STYLE], [VOICE STYLE], [EDIT SPEED]
 Distribution channels beyond TikTok: [SECONDARY CHANNELS]
-System requirements:
+System pressure test:
 Design repeatable content systems with quality gates, rapid iteration loops, and contingency actions when retention or completion drops below threshold.`
   },
   'Blog to Multi Platform Repurposing': {
-    intermediate: `Context pack:
+    intermediate: `Repurposing operating context:
 Source asset quality level: [SOURCE QUALITY]
 Brand voice priorities: [VOICE TRAITS]
 Target platforms and audience intent: [PLATFORMS]
 Repurposing objective: [AWARENESS or LEAD GEN or CONVERSION]
 Keep each output native to its platform while preserving one consistent thesis.`,
-    advanced: `Strategic context:
+    advanced: `Repurposing strategy stack:
 Content operating model: [SOLO or TEAM]
 Publishing volume target: [VOLUME TARGET]
 Funnel position of each platform: [FUNNEL MAP]
-System requirements:
+System pressure test:
 Define transformation logic, QA controls, and attribution assumptions so repurposed assets increase conversion efficiency without diluting message integrity.`
   },
   'Podcast to Clips Production System': {
-    intermediate: `Context pack:
+    intermediate: `Podcast clips operating context:
 Show format and audience profile: [SHOW FORMAT], [AUDIENCE]
 Episode objective: [OBJECTIVE]
 Distribution focus: [PLATFORM PRIORITY]
 Current clip performance baseline: [BASELINE]
 Prioritize moments that drive saves, shares, and intent to consume the long form episode.`,
-    advanced: `Strategic context:
+    advanced: `Podcast clips strategy stack:
 Content to revenue path: [REVENUE PATH]
 Host authority angle: [AUTHORITY POSITION]
 Publishing workflow constraints: [TURNAROUND TIME], [EDITOR BANDWIDTH]
-System requirements:
+System pressure test:
 Create clip selection logic tied to funnel stages, include instrumentation assumptions, and specify optimization actions for low performing clip cohorts.`
   },
   'Lead Magnet Prompt Funnel': {
-    intermediate: `Context pack:
+    intermediate: `Lead magnet operating context:
 Ideal customer profile: [ICP]
 Lead magnet promise: [PROMISE]
 Email stack and send limits: [EMAIL STACK]
 Primary conversion target after opt in: [TARGET OFFER]
 Outputs must connect opt in value to a realistic next step without trust loss.`,
-    advanced: `Strategic context:
+    advanced: `Lead magnet strategy stack:
 Acquisition channels: [CHANNELS]
 Offer ladder: [ENTRY], [CORE], [BACKEND]
 Conversion baselines and bottlenecks: [BASELINES], [BOTTLENECKS]
-System requirements:
+System pressure test:
 Engineer lifecycle logic with leakage diagnostics, decision thresholds, and optimization loops that improve both conversion rate and lead quality over time.`
   }
 } as const;
 
 function enrichIntermediatePrompt(prompt: PromptTemplate): PromptTemplate {
   const context = workflowContext[prompt.workflow as keyof typeof workflowContext]?.intermediate;
+  const executionFrame = buildIntermediateExecutionFrame(prompt);
   const enrichedContent = `${prompt.content}
 
-Intermediate execution requirements:
-Deliverables must be implementation ready, not conceptual.
-Include assumptions and how to validate each one quickly.
-Provide two alternative approaches with tradeoff analysis.
-Define KPI targets and a seven day action sequence.
-Return output in a format a creator operator can run immediately.
-${context ? `\n${context}` : ''}`;
+${executionFrame}
+${context ? `\n\n${context}` : ''}`;
 
   return { ...prompt, content: enrichedContent };
 }
 
 function enrichAdvancedPrompt(prompt: PromptTemplate): PromptTemplate {
   const context = workflowContext[prompt.workflow as keyof typeof workflowContext]?.advanced;
+  const executionFrame = buildAdvancedExecutionFrame(prompt);
   const enrichedContent = `${prompt.content}
 
-Advanced execution requirements:
-Treat this as a high stakes operator brief.
-State assumptions, dependencies, and failure points explicitly.
-Include decision thresholds that determine whether to scale, iterate, or stop.
-Add instrumentation plan with leading and lagging indicators.
-Provide red team critique of the proposed plan and mitigation actions.
-Return a 30 day optimization system with weekly review checkpoints and escalation triggers.
-The final output must be precise enough that an execution team can deploy without clarification questions.
-${context ? `\n${context}` : ''}`;
+${executionFrame}
+${context ? `\n\n${context}` : ''}`;
 
   return { ...prompt, content: enrichedContent };
 }
