@@ -1,30 +1,30 @@
 # CreatorAILab
 
-An AI tools discovery and workflow platform for content creators and solopreneurs. Built with Next.js 14 (App Router), TypeScript, Tailwind CSS, Prisma, and PostgreSQL.
+An AI tools discovery and workflow platform for content creators and solopreneurs. Built with Next.js 14 (App Router), TypeScript, and Tailwind CSS. **Content is served from static catalogs and workflow definitions in the repo** (no database).
 
 ## Architecture Overview
 
 ```
 src/
 ├── app/                   # Next.js App Router pages and API routes
-│   ├── admin/             # Admin CRUD panel (Clerk-protected)
-│   ├── api/subscribe/     # Newsletter subscription API
-│   ├── compare/[slug]/    # Tool comparison pages
+│   ├── admin/             # Admin notice (Clerk-protected; no DB-backed CRUD)
+│   ├── api/subscribe/     # Newsletter confirmation email (Resend)
+│   ├── compare/[slug]/    # Tool comparison pages (no static comparisons yet)
 │   ├── prompts/           # Copy-paste prompt library
 │   ├── quiz/              # AI tool finder quiz
 │   ├── tools/             # AI tools directory + detail pages
 │   └── workflows/         # Step-by-step workflow tutorials
 ├── components/            # Shared React components
 └── lib/                   # Business logic, data access, utilities
-    ├── content.ts         # Safe data fetchers with fallbacks
-    ├── prisma.ts          # Prisma client singleton
-    ├── tool-catalog.ts    # Static tool data (20 tools)
+    ├── content.ts         # Tool/workflow fetchers (catalog + workflow guides)
+    ├── content-types.ts   # Shared content model types
+    ├── tool-catalog.ts    # Static tool data
     ├── tool-context.ts    # Rich context per tool (images, facts, sources)
-    ├── workflow-guides.ts # 20 workflow guide definitions
-    ├── prompt-templates.ts# 50 prompt templates (basic/intermediate/advanced)
+    ├── workflow-guides.ts # Workflow guide definitions
+    ├── prompt-templates.ts# Prompt templates (basic/intermediate/advanced)
     ├── rate-limit.ts      # Upstash Redis rate limiting
     ├── validators.ts      # Zod input validation schemas
-    └── admin-audit.ts     # Admin action audit logging
+    └── admin-audit.ts     # No-op (audit logging was DB-backed)
 ```
 
 ### Key Integrations
@@ -32,8 +32,7 @@ src/
 | Service | Purpose |
 |---------|---------|
 | **Clerk** | Authentication & admin access control |
-| **Prisma + PostgreSQL** | Database ORM and storage |
-| **Resend** | Transactional email delivery |
+| **Resend** | Transactional email (subscribe confirmation; bulk sends need an external list) |
 | **Upstash Redis** | API rate limiting |
 | **PostHog** | Product analytics |
 | **Google Analytics** | Traffic analytics |
@@ -43,7 +42,6 @@ src/
 
 - Node.js 20+
 - npm 10+
-- PostgreSQL database (Supabase-compatible)
 
 ## Quick Start
 
@@ -54,14 +52,7 @@ npm install
 # 2. Configure environment
 cp .env.example .env.local
 
-# 3. Generate Prisma client and run migrations
-npm run db:generate
-npm run db:migrate
-
-# 4. Seed demo data
-npm run db:seed
-
-# 5. Start dev server
+# 3. Start dev server
 npm run dev
 ```
 
@@ -69,8 +60,6 @@ npm run dev
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string (pooled) |
-| `DIRECT_URL` | Yes | PostgreSQL direct connection (for Prisma migrations) |
 | `CLERK_SECRET_KEY` | Yes | Clerk server-side secret key |
 | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Yes | Clerk client-side publishable key |
 | `RESEND_API_KEY` | No | Resend API key for email delivery |
@@ -79,7 +68,7 @@ npm run dev
 | `UPSTASH_REDIS_REST_URL` | No | Upstash Redis URL for rate limiting |
 | `UPSTASH_REDIS_REST_TOKEN` | No | Upstash Redis token |
 | `NEXT_PUBLIC_SITE_URL` | No | Public site URL (defaults to `http://localhost:3000`) |
-| `ADMIN_AUDIT_DISABLED` | No | Set to `1` to disable admin audit logging |
+| `ADMIN_AUDIT_DISABLED` | No | Set to `1` to silence admin audit no-ops |
 
 ## Scripts
 
@@ -90,21 +79,15 @@ npm run dev
 | `npm run start` | Start production server |
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript type checking |
-| `npm run db:generate` | Generate Prisma client |
-| `npm run db:migrate` | Run migrations (dev) |
-| `npm run db:deploy` | Apply migrations (production/CI) |
-| `npm run db:seed` | Seed sample content |
-| `npm run db:studio` | Open Prisma Studio |
-| `npm run db:check` | Validate DB connectivity and seed counts |
 
 ## Modules
 
-- **AI Tool Directory** — `/tools`, `/tools/[slug]` — 20 curated tools with reviews, context, and affiliate links
-- **Workflow Guides** — `/workflows`, `/workflows/[slug]` — 20 step-by-step tutorials with video, checklists, and references
-- **Prompt Library** — `/prompts` — 50 prompts (10 free basic, 20 intermediate, 20 advanced) organized by workflow
+- **AI Tool Directory** — `/tools`, `/tools/[slug]` — curated tools with reviews, context, and affiliate links
+- **Workflow Guides** — `/workflows`, `/workflows/[slug]` — step-by-step tutorials with video, checklists, and references
+- **Prompt Library** — `/prompts` — prompts organized by workflow
 - **Tool Finder Quiz** — `/quiz` — Interactive quiz with personalized tool stack recommendations
-- **Comparison Pages** — `/compare/[slug]` — Side-by-side tool comparisons (admin-created)
-- **Admin Panel** — `/admin` — CRUD for tools, workflows, prompts, and comparisons with audit logging
+- **Comparison Pages** — `/compare/[slug]` — reserved for future static comparisons
+- **Admin** — `/admin` — informational only without a database
 - **SEO** — Metadata, OpenGraph/Twitter cards, JSON-LD structured data, sitemap, robots.txt
 
 ## Security
@@ -121,13 +104,12 @@ npm run dev
 ## Deployment (Vercel)
 
 1. Import repo into Vercel
-2. Add all required environment variables from `.env.example`
+2. Add environment variables from `.env.example` (no `DATABASE_URL` required)
 3. Deploy using the included `vercel.json` config
-4. Post-deploy, validate with `npm run db:check`
+4. Remove `DATABASE_URL` / `DIRECT_URL` from Vercel project settings if they were set for Supabase
 
 ## Developer Notes
 
-- The app gracefully degrades when `DATABASE_URL` is not set by falling back to the static tool catalog
-- Admin audit logs are stored in a raw SQL table (`AdminAuditLog`) created on first write
-- The baseline Prisma migration is at `prisma/migrations/20260225161000_baseline`
+- Tools and workflows come from `src/lib/tool-catalog.ts` and `src/lib/workflow-guides.ts`
+- Weekly newsletter cron (`/api/newsletter/send`) returns success with `sent: 0` until you wire an audience (e.g. Resend) or reconnect a database
 - Do not commit `.env` or `.env.local` files to source control

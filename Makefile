@@ -1,8 +1,7 @@
-.PHONY: setup dev build lint typecheck db seed
+.PHONY: setup dev build lint typecheck
 
 setup:
 	npm install
-	npm run db:generate
 
 dev:
 	npm run dev
@@ -15,9 +14,3 @@ lint:
 
 typecheck:
 	npm run typecheck
-
-db:
-	npm run db:migrate
-
-seed:
-	npm run db:seed

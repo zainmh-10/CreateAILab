@@ -1,108 +1,47 @@
-import type { Comparison, Prompt, Tool, Workflow } from '@prisma/client';
-
 import { getCatalogToolBySlug, popularToolsCatalog } from '@/lib/tool-catalog';
-import { prisma } from '@/lib/prisma';
+import type { ComparisonWithTools, Prompt, Tool, Workflow, WorkflowWithTools } from '@/lib/content-types';
+import { workflowGuides } from '@/lib/workflow-guides';
 
-const hasDatabaseUrl = Boolean(process.env.DATABASE_URL);
+const catalogEpoch = new Date('2026-02-27T00:00:00.000Z');
 
-export async function getTools() {
-  return prisma.tool.findMany({ orderBy: { featured: 'desc' } });
-}
-
-export async function getToolBySlug(slug: string) {
-  return prisma.tool.findUnique({ where: { slug } });
-}
-
-export async function getWorkflows() {
-  return prisma.workflow.findMany({ orderBy: { createdAt: 'desc' } });
-}
-
-export async function getWorkflowBySlug(slug: string) {
-  return prisma.workflow.findUnique({ where: { slug }, include: { toolsUsed: true } });
-}
-
-export async function getPrompts() {
-  return prisma.prompt.findMany({ orderBy: { createdAt: 'desc' } });
-}
-
-export async function getComparisonBySlug(slug: string) {
-  return prisma.comparison.findUnique({ where: { slug }, include: { tools: true } });
-}
-
-export async function getFeaturedTools(limit = 3): Promise<Tool[]> {
-  return prisma.tool.findMany({ where: { featured: true }, take: limit });
+function guidesToWorkflows(): Workflow[] {
+  return workflowGuides.map((g) => ({
+    id: `guide-${g.slug}`,
+    title: g.title,
+    slug: g.slug,
+    summary: g.summary,
+    content: g.steps.join('\n\n'),
+    featuredImage: null,
+    createdAt: catalogEpoch,
+    updatedAt: catalogEpoch
+  }));
 }
 
 export async function safeGetTools(): Promise<Tool[]> {
-  if (!hasDatabaseUrl) {
-    return popularToolsCatalog;
-  }
-  try {
-    const dbTools = await getTools();
-    const merged = [...dbTools, ...popularToolsCatalog];
-    const deduped = new Map<string, Tool>();
-    for (const tool of merged) {
-      if (!deduped.has(tool.slug)) {
-        deduped.set(tool.slug, tool);
-      }
-    }
-    return Array.from(deduped.values());
-  } catch {
-    return popularToolsCatalog;
-  }
+  return popularToolsCatalog;
 }
 
 export async function safeGetToolBySlug(slug: string): Promise<Tool | null> {
-  if (!hasDatabaseUrl) {
-    return getCatalogToolBySlug(slug);
-  }
-  try {
-    return (await getToolBySlug(slug)) ?? getCatalogToolBySlug(slug);
-  } catch {
-    return getCatalogToolBySlug(slug);
-  }
+  return getCatalogToolBySlug(slug);
 }
 
 export async function safeGetWorkflows(): Promise<Workflow[]> {
-  if (!hasDatabaseUrl) {
-    return [];
-  }
-  try {
-    return await getWorkflows();
-  } catch {
-    return [];
-  }
+  return guidesToWorkflows();
 }
 
-export async function safeGetWorkflowBySlug(slug: string): Promise<(Workflow & { toolsUsed: Tool[] }) | null> {
-  if (!hasDatabaseUrl) {
+export async function safeGetWorkflowBySlug(slug: string): Promise<WorkflowWithTools | null> {
+  const wf = guidesToWorkflows().find((w) => w.slug === slug);
+  if (!wf) {
     return null;
   }
-  try {
-    return await getWorkflowBySlug(slug);
-  } catch {
-    return null;
-  }
+  return { ...wf, toolsUsed: [] };
 }
 
 export async function safeGetPrompts(): Promise<Prompt[]> {
-  if (!hasDatabaseUrl) {
-    return [];
-  }
-  try {
-    return await getPrompts();
-  } catch {
-    return [];
-  }
+  return [];
 }
 
-export async function safeGetComparisonBySlug(slug: string): Promise<(Comparison & { tools: Tool[] }) | null> {
-  if (!hasDatabaseUrl) {
-    return null;
-  }
-  try {
-    return await getComparisonBySlug(slug);
-  } catch {
-    return null;
-  }
+export async function safeGetComparisonBySlug(slug: string): Promise<ComparisonWithTools | null> {
+  void slug;
+  return null;
 }

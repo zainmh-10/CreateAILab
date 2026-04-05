@@ -1,4 +1,4 @@
-import type { Tool } from '@prisma/client';
+import type { Tool } from '@/lib/content-types';
 
 const now = new Date('2026-02-27T00:00:00.000Z');
 

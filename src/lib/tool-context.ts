@@ -1,4 +1,4 @@
-import type { Tool } from '@prisma/client';
+import type { Tool } from '@/lib/content-types';
 
 type SourceLink = {
   label: string;

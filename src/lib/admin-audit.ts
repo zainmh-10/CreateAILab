@@ -1,5 +1,3 @@
-import { prisma } from '@/lib/prisma';
-
 type AuditInput = {
   userId: string;
   action: string;
@@ -10,24 +8,10 @@ type AuditInput = {
   meta?: Record<string, unknown>;
 };
 
+/** No-op: database-backed audit logging is disabled. */
 export async function logAdminAudit(input: AuditInput) {
+  void input;
   if (process.env.ADMIN_AUDIT_DISABLED === '1') {
     return;
-  }
-
-  try {
-    await prisma.adminAuditLog.create({
-      data: {
-        userId: input.userId,
-        action: input.action,
-        entity: input.entity,
-        targetId: input.targetId ?? null,
-        status: input.status,
-        message: input.message ?? null,
-        meta: (input.meta ?? {}) as object
-      }
-    });
-  } catch (error) {
-    console.error('admin_audit_failed', error);
   }
 }
